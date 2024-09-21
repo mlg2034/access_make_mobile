@@ -1,0 +1,51 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Best Practices
+    avoid_print: true
+    avoid_dynamic_calls: true
+    avoid_redundant_argument_values: true
+    avoid_single_cascade_in_expression_statements: true
+    prefer_const_constructors: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_typing_uninitialized_variables: true
+    avoid_unnecessary_containers: true
+    prefer_const_declarations: true
+    prefer_expression_function_bodies: true
+    prefer_function_declarations_over_variables: true
+    unnecessary_lambdas: true
+    unnecessary_null_in_if_null_operators: true
+    no_leading_underscores_for_local_identifiers: true
+
+    # Code Style
+    prefer_interpolation_to_compose_strings: true
+    prefer_single_quotes: true
+    curly_braces_in_flow_control_structures: true
+    avoid_as: true
+    use_super_parameters: true
+    avoid_empty_else: true
+    prefer_conditional_assignment: true
+    unnecessary_new: true
+    always_require_non_null_named_parameters: true
+
+    # Error Prevention
+    no_duplicate_case_values: true
+    avoid_returning_null_for_future: true
+    avoid_returning_null_for_void: true
+    avoid_void_async: true
+    avoid_equals_and_hash_code_on_mutable_classes: true
+    use_full_hex_values_for_flutter_colors: true
+
+    # Performance and Optimization
+    avoid_init_to_null: true
+    avoid_js_rounded_ints: true
+    avoid_unnecessary_late: true
+    prefer_is_empty: true
+    unnecessary_const: true
+    avoid_rebuild_on_transitions: true
+
+    # Documentation
+    public_member_api_docs: true
+    always_declare_return_types: true

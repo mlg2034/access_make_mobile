@@ -1,0 +1,63 @@
+# Flutter/Dart related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+pubspec.lock
+
+# iOS related
+ios/Flutter/.last_build_id
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Runner.xcarchive/
+ios/build/
+
+# Xcode related
+*.xcworkspace
+*.xcuserdata
+*.xcodeproj
+*.xcscheme
+*.xccheckout
+*.xcdebugger
+
+# Android related
+android/.gradle/
+android/app/build/
+android/local.properties
+android/.idea/
+
+# Generated files
+*.log
+*.tmp
+*.DS_Store
+
+# IntelliJ related (JetBrains IDE)
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VSCode related
+.vscode/
+
+# Linux related
+linux/flutter/ephemeral/
+
+# Web related
+web/.dart_tool/
+web/.flutter_tool/
+web/build/
+
+# Windows related
+windows/flutter/ephemeral/
+windows/.flutter_tool/
+windows/build/
+
+# macOS related
+macos/flutter/ephemeral/
+macos/.flutter_tool/
+macos/build/
+
+# Exclude the .env file if you are using environment variables
+.env
