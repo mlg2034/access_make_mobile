@@ -1,156 +1,169 @@
-import 'package:acces_make_mobile/src/features/home/bloc/check_biometric/home_bloc.dart';
+import 'dart:io';
+
 import 'package:acces_make_mobile/src/ui_kit/ui_kit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({
-    required this.cameraController,
     super.key,
+    required this.customPaint,
+    required this.onImage,
+    this.onCameraFeedReady,
+    this.onCameraLensDirectionChanged,
+    this.initialCameraLensDirection = CameraLensDirection.front,
   });
-  final CameraController cameraController;
+
+  final CustomPaint? customPaint;
+  final Function(InputImage inputImage) onImage;
+  final VoidCallback? onCameraFeedReady;
+  final Function(CameraLensDirection direction)? onCameraLensDirectionChanged;
+  final CameraLensDirection initialCameraLensDirection;
 
   @override
   State<CameraView> createState() => _CameraViewState();
 }
 
 class _CameraViewState extends State<CameraView> {
+  static List<CameraDescription> _cameras = [];
+  CameraController? _controller;
+  int _cameraIndex = -1;
+  bool _changingCameraLens = false;
+
   @override
   void initState() {
-    context.read<CheckBiometricBloc>().add(
-          ChechBiometri(),
-        );
     super.initState();
+
+    _initialize();
   }
 
-  _biometricListener(
-    BuildContext context,
-    CheckBiometricState state,
-  ) {
-    switch (state) {
-      case CheckBiometricError():
-        return snackBarBuilder(
-          context,
-          SnackBarOptions(
-            title: state.error,
-            type: SnackBarType.error,
-          ),
-        );
-
-      case CheckBiometricSuccess():
-        return snackBarBuilder(
-          context,
-          SnackBarOptions(
-            title: 'Success!',
-            type: SnackBarType.success,
-          ),
-        );
-      //TODO add Navigation
-      case NotIndentified():
-        return snackBarBuilder(
-          context,
-          SnackBarOptions(
-            title: 'Warning!',
-            type: SnackBarType.warning,
-          ),
-        );
-      default:
+  Future<void> _initialize() async {
+    if (_cameras.isEmpty) {
+      _cameras = await availableCameras();
+    }
+    for (var i = 0; i < _cameras.length; i++) {
+      if (_cameras[i].lensDirection == widget.initialCameraLensDirection) {
+        _cameraIndex = i;
         break;
+      }
+    }
+    if (_cameraIndex != -1) {
+      _startLiveFeed();
     }
   }
 
-  VoidCallback _tryAgain(BuildContext context) => () {
-        context.read<CheckBiometricBloc>().add(
-              ChechBiometri(),
-            );
-      };
+  @override
+  void dispose() {
+    _stopLiveFeed();
+    super.dispose();
+  }
 
-      VoidCallback _toRegistration(BuildContext context)=>(){
-
-      };
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CheckBiometricBloc, CheckBiometricState>(
-      listener: _biometricListener,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(body: _liveFeedBody());
+  }
+
+  Widget _liveFeedBody() {
+    if (_cameras.isEmpty) return const AppLoader();
+    if (_controller == null) return const AppLoader();
+    if (_controller?.value.isInitialized == false) return const AppLoader();
+    return ColoredBox(
+      color: Colors.black,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: CameraPreview(widget.cameraController),
-            ),
-          ),
-          const Spacer(),
-          BlocBuilder<CheckBiometricBloc, CheckBiometricState>(
-            builder: (context, state) {
-              if (state is CheckBiometricError) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Произошла ошибка, попробуйте снова  ',
-                      style: AppFonts.displayMedium.copyWith(
-                        color: AppColors.blue.withOpacity(0.8),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AppButton(
-                      onPressed: _tryAgain(context),
-                      child: Text(
-                        'Попробовать снова',
-                        style: AppFonts.displaySmall.copyWith(
-                          color: AppColors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              } else if (state is CheckBiometricSuccess) {
-                return Text(
-                  'Вы успешно прошли биометрию!',
-                  style: AppFonts.displayMedium.copyWith(
-                    color: AppColors.blue.withOpacity(0.8),
-                  ),
-                );
-              } else if (state is NotIndentified) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Мы не нашли вас в нашей системе.\n Пройдите регистрацию и попробуйте снова',
-                      style: AppFonts.displayMedium.copyWith(
-                        color: AppColors.blue.withOpacity(0.8),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AppButton(
-                      onPressed: _toRegistration(context),
-                      child: Text(
-                        'На регистрацию',
-                        style: AppFonts.displaySmall.copyWith(
-                          color: AppColors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              }
-              return Text(
-                'Пройдите биометрию для ',
-                style: AppFonts.displayMedium.copyWith(
-                  color: AppColors.blue.withOpacity(0.8),
-                ),
-              );
-            },
-          ),
+          CameraPreview(_controller!),
+          if (widget.customPaint != null) widget.customPaint!,
         ],
+      ),
+    );
+  }
+
+  Future _startLiveFeed() async {
+    final camera = _cameras[_cameraIndex];
+    _controller = CameraController(
+      camera,
+      ResolutionPreset.high,
+      enableAudio: false,
+      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
+    );
+    _controller?.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      _controller?.getMinZoomLevel().then((value) {});
+      _controller?.getMaxZoomLevel().then((value) {});
+      _controller?.getMinExposureOffset().then((value) {});
+      _controller?.getMaxExposureOffset().then((value) {});
+      _controller?.startImageStream(_processCameraImage).then((value) {
+        if (widget.onCameraFeedReady != null) {
+          widget.onCameraFeedReady!();
+        }
+        if (widget.onCameraLensDirectionChanged != null) {
+          widget.onCameraLensDirectionChanged!(camera.lensDirection);
+        }
+      });
+      setState(() {});
+    });
+  }
+
+  Future _stopLiveFeed() async {
+    await _controller?.stopImageStream();
+    await _controller?.dispose();
+    _controller = null;
+  }
+
+  void _processCameraImage(CameraImage image) {
+    final inputImage = _inputImageFromCameraImage(image);
+    if (inputImage == null) return;
+    widget.onImage(inputImage);
+  }
+
+  final _orientations = {
+    DeviceOrientation.portraitUp: 0,
+    DeviceOrientation.landscapeLeft: 90,
+    DeviceOrientation.portraitDown: 180,
+    DeviceOrientation.landscapeRight: 270,
+  };
+
+  InputImage? _inputImageFromCameraImage(CameraImage image) {
+    if (_controller == null) return null;
+
+    final camera = _cameras[_cameraIndex];
+    final sensorOrientation = camera.sensorOrientation;
+    InputImageRotation? rotation;
+    if (Platform.isIOS) {
+      rotation = InputImageRotationValue.fromRawValue(sensorOrientation);
+    } else if (Platform.isAndroid) {
+      var rotationCompensation = _orientations[_controller!.value.deviceOrientation];
+      if (rotationCompensation == null) return null;
+      if (camera.lensDirection == CameraLensDirection.front) {
+        // front-facing
+        rotationCompensation = (sensorOrientation + rotationCompensation) % 360;
+      } else {
+        // back-facing
+        rotationCompensation = (sensorOrientation - rotationCompensation + 360) % 360;
+      }
+      rotation = InputImageRotationValue.fromRawValue(rotationCompensation);
+    }
+    if (rotation == null) return null;
+    // print('final rotation: $rotation');
+
+    final format = InputImageFormatValue.fromRawValue(image.format.raw);
+    if (format == null || (Platform.isAndroid && format != InputImageFormat.nv21) || (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
+
+    if (image.planes.length != 1) return null;
+    final plane = image.planes.first;
+
+    return InputImage.fromBytes(
+      bytes: plane.bytes,
+      metadata: InputImageMetadata(
+        size: Size(image.width.toDouble(), image.height.toDouble()),
+        rotation: rotation,
+        format: format,
+        bytesPerRow: plane.bytesPerRow,
       ),
     );
   }
