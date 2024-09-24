@@ -1,4 +1,3 @@
-import 'package:acces_make_mobile/src/features/home/presentation/view/camera_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +20,13 @@ class DetectorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      customPaint: customPaint,
-      onImage: onImage,
-      onCameraFeedReady: onCameraFeedReady,
-      initialCameraLensDirection: initialCameraLensDirection,
-      onCameraLensDirectionChanged: onCameraLensDirectionChanged,
-    );
+    // return CameraView(
+    //   customPaint: customPaint,
+    //   onImage: onImage,
+    //   onCameraFeedReady: onCameraFeedReady,
+    //   initialCameraLensDirection: initialCameraLensDirection,
+    //   onCameraLensDirectionChanged: onCameraLensDirectionChanged,
+    // );
+    return const SizedBox();
   }
 }
