@@ -1,5 +1,4 @@
 import 'package:acces_make_mobile/src/features/home/bloc/check_biometric/home_bloc.dart';
-import 'package:acces_make_mobile/src/features/home/presentation/view/face_camera_view.dart';
 import 'package:acces_make_mobile/src/features/home/presentation/view/face_mesh_detector_view.dart';
 import 'package:acces_make_mobile/src/ui_kit/ui_kit.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,9 +16,10 @@ class BiometricView extends StatefulWidget {
 class _BiometricViewState extends State<BiometricView> {
   @override
   void initState() {
-    context.read<CheckBiometricBloc>().add(
-          ChechBiometri(),
-        );
+
+    // context.read<CheckBiometricBloc>().add(
+    //       ChechBiometri(),
+    //     );
     super.initState();
   }
 
@@ -64,10 +64,7 @@ class _BiometricViewState extends State<BiometricView> {
             );
       };
 
-      VoidCallback _toRegistration(BuildContext context)=>(){
-
-      };
-
+  VoidCallback _toRegistration(BuildContext context) => () {};
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +77,7 @@ class _BiometricViewState extends State<BiometricView> {
             borderRadius: BorderRadius.circular(8),
             child: const AspectRatio(
               aspectRatio: 1,
-              child: FaceCameraView(),
+              child: FaceDetectionView(),
             ),
           ),
           const Spacer(),
@@ -121,10 +118,12 @@ class _BiometricViewState extends State<BiometricView> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 20),
                     Text(
-                      'Мы не нашли вас в нашей системе.\n Пройдите регистрацию и попробуйте снова',
+                      'Мы не нашли вас в нашей системе.\nПройдите регистрацию и попробуйте снова',
                       style: AppFonts.displayMedium.copyWith(
-                        color: AppColors.blue.withOpacity(0.8),
+                        color: AppColors.
+                        blue.withOpacity(0.8),
                       ),
                     ),
                     const SizedBox(
@@ -138,7 +137,9 @@ class _BiometricViewState extends State<BiometricView> {
                           color: AppColors.white,
                         ),
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 20),
+
                   ],
                 );
               }

@@ -20,8 +20,9 @@ class AppTextField extends StatefulWidget {
     this.suffixIcon,
     this.inputFormatters,
     this.focusNode,
-    this.maxLines,
+    this.maxLines=1,
     this.maxLenght,
+    this.textInputAction,
   }) : assert(
           isPassword == false || suffixIcon == null,
           '''You can use only one of this attributes. If you want to use suffixIcon - set isPassword to false''',
@@ -65,7 +66,7 @@ class AppTextField extends StatefulWidget {
   final void Function(String, Map<String, dynamic>)? onAppPrivateCommand;
   final int? maxLines;
   final int? maxLenght;
-
+  final TextInputAction? textInputAction;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -115,6 +116,8 @@ class _AppTextFieldState extends State<AppTextField> {
             focusNode.unfocus();
             widget.onEditingComplete?.call();
           },
+          cursorColor: AppColors.blue,
+          textInputAction: widget.textInputAction,
           maxLines: widget.maxLines,
           maxLength: widget.maxLenght,
           style: AppFonts.displayMedium,
@@ -160,6 +163,14 @@ class _AppTextFieldState extends State<AppTextField> {
                 suffixIconConstraints: const BoxConstraints(
                   minHeight: 16,
                   minWidth: 16,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: AppColors.blue),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: AppColors.blue),
                 ),
               ),
         ),

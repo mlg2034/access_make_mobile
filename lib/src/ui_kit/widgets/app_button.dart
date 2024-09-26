@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../ui_kit.dart';
 class AppButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget? child;
   final Color? backgroundColor;
   final Color? foregroundColor;
@@ -13,8 +13,8 @@ class AppButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   
   const AppButton({
-    required this.child,
-    required this.onPressed,
+     this.child,
+     this.onPressed,
     this.backgroundColor,
     this.foregroundColor,
     this.overlayColor,

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:injectable/injectable.dart';
 import 'package:local_auth/local_auth.dart';
+
 @injectable
 class BiometrickRepository {
   final LocalAuthentication _localAuthentication = LocalAuthentication();
@@ -11,14 +12,16 @@ class BiometrickRepository {
         localizedReason: 'Please authenticate to access this feature',
         options: const AuthenticationOptions(
           stickyAuth: true,
-          biometricOnly: true, 
+          biometricOnly: false,
+          useErrorDialogs: false,
+          sensitiveTransaction: false,
         ),
       );
-      
+
       if (!isAuthenticated) {
         log('Biometric authentication failed');
       }
-      
+
       return isAuthenticated;
     } catch (error) {
       log('Biometric error: $error');

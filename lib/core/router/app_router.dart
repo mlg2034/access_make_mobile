@@ -7,7 +7,13 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         CustomRoute(
           page: HomeRoute.page,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute(
+          page: RegistrationRoute.page,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
           initial: true,
-        )
+
+        ),
       ];
 }
