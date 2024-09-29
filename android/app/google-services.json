@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344752282169",
+    "project_id": "accessmakemobile",
+    "storage_bucket": "accessmakemobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344752282169:android:ae48d0938f595e9b160be8",
+        "android_client_info": {
+          "package_name": "com.example.acces_make_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoLVYre75X0hmw9dRGEqt76fTPeAnCoEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
