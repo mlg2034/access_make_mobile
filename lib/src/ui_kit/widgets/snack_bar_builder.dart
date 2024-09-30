@@ -61,11 +61,11 @@ enum SnackBarType {
       case SnackBarType.defaultType:
         return Colors.transparent;
       case SnackBarType.error:
-        return AppColors.red.withOpacity(0.5);
+        return AppColors.red.withOpacity(0.1);
       case SnackBarType.success:
-        return AppColors.green.withOpacity(0.5);
+        return AppColors.green.withOpacity(0.1);
       case SnackBarType.warning:
-        return AppColors.orange.withOpacity(0.5);
+        return AppColors.orange.withOpacity(0.1);
     }
   }
 

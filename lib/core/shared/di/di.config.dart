@@ -13,6 +13,10 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../../src/features/home/bloc/check_biometric/home_bloc.dart' as _i63;
 import '../../../src/features/home/data/biometrick_repository.dart' as _i618;
+import '../../../src/features/registration/bloc/registration/registation_bloc.dart'
+    as _i908;
+import '../../../src/features/registration/data/register_repository.dart'
+    as _i586;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i174.GetIt $initGetIt(
@@ -26,7 +30,10 @@ _i174.GetIt $initGetIt(
     environmentFilter,
   );
   gh.factory<_i618.BiometrickRepository>(() => _i618.BiometrickRepository());
+  gh.factory<_i586.RegisterRepository>(() => _i586.RegisterRepository());
   gh.factory<_i63.CheckBiometricBloc>(
       () => _i63.CheckBiometricBloc(gh<_i618.BiometrickRepository>()));
+  gh.factory<_i908.RegistrationBloc>(
+      () => _i908.RegistrationBloc(gh<_i586.RegisterRepository>()));
   return getIt;
 }

@@ -6,13 +6,16 @@ class CreateUserParam extends Params {
   final String sureName;
   final String emailAddress;
   final String visitReason;
-
+  final String id;
+  final String? biometricData;
   CreateUserParam({
     required this.emailAddress,
     required this.name,
     required this.phone,
     required this.sureName,
     required this.visitReason,
+    required this.id,
+    this.biometricData,
   });
   @override
   Map<String, dynamic> toData() {
@@ -22,6 +25,8 @@ class CreateUserParam extends Params {
       'sureName': sureName,
       'phone': phone,
       'email': emailAddress,
+      'id':id,
+      'biometricData':biometricData,
     };
   }
 }

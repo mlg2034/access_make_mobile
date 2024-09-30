@@ -8,12 +8,11 @@ class AppRouter extends RootStackRouter {
         CustomRoute(
           page: HomeRoute.page,
           transitionsBuilder: TransitionsBuilders.fadeIn,
+          initial: true,
         ),
         CustomRoute(
           page: RegistrationRoute.page,
           transitionsBuilder: TransitionsBuilders.fadeIn,
-          initial: true,
-
         ),
       ];
 }
