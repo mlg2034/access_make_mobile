@@ -77,7 +77,7 @@ class _BiometricViewState extends State<BiometricView> {
             borderRadius: BorderRadius.circular(8),
             child: const AspectRatio(
               aspectRatio: 1,
-              child: FaceDetectionView(),
+              child: FaceMeshDetectorView(),
             ),
           ),
           const Spacer(),
